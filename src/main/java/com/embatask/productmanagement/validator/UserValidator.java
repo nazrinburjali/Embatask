@@ -61,6 +61,7 @@ public class UserValidator implements Validator {
                 errors.rejectValue("userEmail", "user.email.invalid");
             }
                   }
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userPassword", "user.password.empty");
         if (!errors.hasFieldErrors("userPassword")) {
             if ((!GenericValidator.isInRange(user.getUserPassword().length(), 8, 150))) {

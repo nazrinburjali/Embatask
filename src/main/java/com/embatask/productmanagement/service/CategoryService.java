@@ -34,7 +34,7 @@ public class CategoryService {
         if(optionalCategory.isPresent()){
             category = optionalCategory.get();
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li category yoxdur");
+            throw new RuntimeException( id + " id-li category yoxdur");
         }
         return category;
     }
@@ -44,7 +44,7 @@ public class CategoryService {
         if (optionalCategory.isPresent()){
             return categoryRepository.save(category);
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, category.getCategoryID() + " id-li category yoxdur");
+            throw new RuntimeException( category.getCategoryID() + " id-li category yoxdur");
         }
     }
 
@@ -53,7 +53,7 @@ public class CategoryService {
         if (optionalCategory.isPresent()){
             categoryRepository.deleteById(id);
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li category yoxdur");
+            throw new RuntimeException(id + " id-li category yoxdur");
         }
     }
 

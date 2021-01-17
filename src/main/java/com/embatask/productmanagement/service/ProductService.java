@@ -34,11 +34,11 @@ public class ProductService {
 
     public Product updateProduct(Product product){
         Optional<Product>optionalProduct = productRepository.findById(product.getProductID());
+        Product product1 = null;
         if (optionalProduct.isPresent()){
-           return productRepository.save(product);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, product.getProductID() + "id-li product movcud deyil ");
+           productRepository.save(product);
         }
+        return product1;
     }
 
     public Product getProductById(int id){
@@ -46,8 +46,6 @@ public class ProductService {
         Product product = null;
         if (optionalProduct.isPresent()){
             product = optionalProduct.get();
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li product");
         }
         return  product;
     }
@@ -56,8 +54,6 @@ public class ProductService {
         Optional<Product>optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()){
             productRepository.deleteById(id);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li product");
         }
     }
 

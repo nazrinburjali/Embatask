@@ -41,8 +41,6 @@ public class UserService {
         User user = null;
         if(optionalUser.isPresent()){
             user = optionalUser.get();
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li user yoxdur");
         }
         return user;
     }
@@ -53,46 +51,24 @@ public class UserService {
         User user = null;
         if(optionalUser.isPresent()){
             user = optionalUser.get();
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, email + " emailine malik user yoxdur");
         }
         return user;
     }
-    public String getEmail(String email){
-        Optional<String> optionalS = userRepository.getUserByUserEmail(email);
-        if(optionalS.isPresent()){
-          return optionalS.get();
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, email + " emailine malik user yoxdur");
-        }
 
-    }
-    public User checkUserLogin(String email){
-        Optional<User> optionalUser = Optional.ofNullable(userRepository.findByUserEmail(email));
-        User user = null;
-        if(optionalUser.isPresent()){
-            user = optionalUser.get();
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, email + " bazada tapilmadi");
-        }
-        return user;
-    }
 
     public User updateUser(User user){
         Optional<User>optionalUser = userRepository.findById(user.getUserID());
+        User user1 = null;
         if (optionalUser.isPresent()){
-            return userRepository.save(user);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, user.getUserID() + " id-li user yoxdur");
+             userRepository.save(user);
         }
+        return user1;
     }
 
     public  void deleteUser(int id){
         Optional<User>optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()){
             userRepository.deleteById(id);
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li user yoxdur");
         }
     }
 

@@ -33,7 +33,7 @@ public class ImageService {
         if (optionalImage.isPresent()) {
             image = optionalImage.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li image yoxdur");
+            throw new RuntimeException( id + " id-li image yoxdur");
         }
         return image;
     }
@@ -43,7 +43,7 @@ public class ImageService {
         if (optionalImage.isPresent()) {
             return imageRepository.save(image);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, image.getImageID() + " id-li image yoxdur");
+            throw new RuntimeException(image.getImageID() + " id-li image yoxdur");
         }
     }
 
@@ -52,7 +52,7 @@ public class ImageService {
         if (optionalImage.isPresent()) {
             imageRepository.deleteById(id);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, id + " id-li image yoxdur");
+            throw new RuntimeException( id + " id-li image yoxdur");
         }
     }
 
