@@ -2,9 +2,11 @@ package com.embatask.productmanagement.security;
 
 import com.embatask.productmanagement.domain.Role;
 import com.embatask.productmanagement.domain.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,13 +27,19 @@ public class UserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
+        try{
+
         List<Role> roles = user.getRoles();
         roles.forEach(role -> {
             GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.getRoleName());
             authorities.add(authority);
-        });
+        });}catch (ResponseStatusException e) {
+
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Dogru endpoint daxil edilmeyib");
+        }
 
         return authorities;
+
     }
 
     @Override

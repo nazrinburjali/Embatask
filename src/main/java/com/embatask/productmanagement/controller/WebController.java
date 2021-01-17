@@ -13,11 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -39,6 +34,7 @@ public class WebController {
     public String showIndex() {
         return "web/login";
     }
+
 
     @GetMapping("/login")
     public String showLogin() {

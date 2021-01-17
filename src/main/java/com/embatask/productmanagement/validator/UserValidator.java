@@ -1,6 +1,9 @@
 package com.embatask.productmanagement.validator;
 import com.embatask.productmanagement.domain.User;
+import com.embatask.productmanagement.repository.UserRepository;
+import com.embatask.productmanagement.service.UserService;
 import org.apache.commons.validator.GenericValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -8,6 +11,11 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserValidator implements Validator {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Override
     public boolean supports(Class<?> aClass) {
         return aClass.equals(User.class);
@@ -40,7 +48,7 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userPhone", "user.phone.empty");
         if (!errors.hasFieldErrors("userPhone")) {
-            if (!GenericValidator.isInRange(user.getUserPhone().length(), 10, 35)) {
+            if (!GenericValidator.isInRange(user.getUserPhone().length(), 7, 35)) {
                 errors.rejectValue("userPhone", "user.phone.length");
             } else if (!GenericValidator.matchRegexp(user.getUserPhone(), regexNumbers)) {
                 errors.rejectValue("userPhone", "user.phone.invalid");
@@ -52,8 +60,7 @@ public class UserValidator implements Validator {
             if (!GenericValidator.isEmail(user.getUserEmail())) {
                 errors.rejectValue("userEmail", "user.email.invalid");
             }
-
-        }
+                  }
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userPassword", "user.password.empty");
         if (!errors.hasFieldErrors("userPassword")) {
             if ((!GenericValidator.isInRange(user.getUserPassword().length(), 8, 150))) {

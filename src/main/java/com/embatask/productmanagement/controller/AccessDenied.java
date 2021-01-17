@@ -3,15 +3,14 @@ package com.embatask.productmanagement.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping
+public class AccessDenied {
 
-@GetMapping(value = {"/", "/index", })
-    public String showUserPage(){
-    return "user/index";
-}
-
-
+    @GetMapping("/accessdenied")
+    public ModelAndView accessdenied() {
+        return new ModelAndView("web/accessdenied");
+    }
 }

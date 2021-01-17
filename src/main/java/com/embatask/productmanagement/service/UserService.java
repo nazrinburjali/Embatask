@@ -1,6 +1,9 @@
 package com.embatask.productmanagement.service;
+import com.embatask.productmanagement.controller.AdminController;
 import com.embatask.productmanagement.domain.User;
 import com.embatask.productmanagement.repository.UserRepository;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,7 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-
+    private final static Logger logger = LogManager.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -43,6 +46,8 @@ public class UserService {
         }
         return user;
     }
+
+
     public User getUserByEmail(String email){
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findByUserEmail(email));
         User user = null;
@@ -52,6 +57,15 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, email + " emailine malik user yoxdur");
         }
         return user;
+    }
+    public String getEmail(String email){
+        Optional<String> optionalS = userRepository.getUserByUserEmail(email);
+        if(optionalS.isPresent()){
+          return optionalS.get();
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, email + " emailine malik user yoxdur");
+        }
+
     }
     public User checkUserLogin(String email){
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findByUserEmail(email));

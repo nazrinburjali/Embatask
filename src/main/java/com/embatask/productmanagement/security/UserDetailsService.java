@@ -21,6 +21,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         if (optionalUser.isPresent()){
             User user = optionalUser.get();
             userPrincipal = new UserPrincipal(user);
+
         }else{
             throw new UsernameNotFoundException("User " + username + " not found");
         }

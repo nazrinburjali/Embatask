@@ -1,11 +1,15 @@
 package com.embatask.productmanagement.controller;
 
 import com.embatask.productmanagement.domain.Category;
+import com.embatask.productmanagement.domain.Image;
 import com.embatask.productmanagement.domain.Product;
 import com.embatask.productmanagement.service.CategoryService;
+import com.embatask.productmanagement.service.ImageService;
 import com.embatask.productmanagement.service.ProductService;
 import com.embatask.productmanagement.util.FileUtility;
 import com.embatask.productmanagement.validator.ProductValidator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.print.attribute.standard.Media;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,12 +28,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
+    private final static Logger logger = LogManager.getLogger(AdminController.class);
     @Value("${upload.folder}")
     private String uploadFolder;
 
@@ -41,15 +47,18 @@ public class AdminController {
     @Autowired
     private ProductValidator productValidator;
 
+    @Autowired
+    private ImageService imageService;
+
     @InitBinder
-    public void  initProductBinder(WebDataBinder dataBinder) {
-        if(dataBinder.getTarget() != null && (dataBinder.getTarget()).getClass() == Product.class){
+    public void initProductBinder(WebDataBinder dataBinder) {
+        if (dataBinder.getTarget() != null && (dataBinder.getTarget()).getClass() == Product.class) {
             dataBinder.setValidator(productValidator);
         }
     }
 
     @GetMapping("/")
-    public String showIndex(){
+    public String showIndex() {
         return "admin/index";
     }
 
@@ -72,20 +81,20 @@ public class AdminController {
     }
 
     @PostMapping("/new-product-submit")
-    public ModelAndView newProductSubmit(@ModelAttribute @Validated Product product,BindingResult result,
+    public ModelAndView newProductSubmit(@ModelAttribute @Validated Product product, BindingResult result,
                                          @RequestParam(name = "image1") MultipartFile image1,
                                          @RequestParam(name = "image2", required = false) MultipartFile image2) {
+
         ModelAndView mav = new ModelAndView();
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             System.out.println("Formda xətalar var");
             result.getAllErrors();
             mav.setViewName("admin/new-product");
             List<Category> categories = categoryService.getSubCategories();
             mav.addObject("categories", categories);
-        }
-        else{
-            productService.addProduct(product);
-            try{
+        } else {
+//            productService.addProduct(product);
+            try {
                 System.out.println("Original name" + image1.getOriginalFilename());
                 System.out.println("File name" + image1.getName());
                 System.out.println("Content type" + image1.getContentType());
@@ -98,40 +107,46 @@ public class AdminController {
                         LocalDateTime.now().format(formatter),
                         LocalDateTime.now().getNano(),
                         FileUtility.getFileExtension(image1.getOriginalFilename()));
+
                 System.out.println("file name" + fileName);
                 System.out.println("Məhsul əlavə edildi");
                 Path filePath = Paths.get(fileName);
-                if (!Files.exists(filePath.getParent())){
+                if (!Files.exists(filePath.getParent())) {
                     Files.createDirectory(filePath.getParent());
-                    System.out.println("Created upload folder");
+                    System.out.println("Upload papkasi yaradildi");
                 }
                 Files.copy(image1.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            }
-            catch (Exception e){
+                Image image = new Image();
+                image.setLocalUrl(filePath.toString());
+                image.setImageName(image1.getOriginalFilename());
+                productService.addProduct(product);
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            mav.setViewName("redirect:/admin/products");}
+            mav.setViewName("redirect:/admin/products");
+        }
 
         return mav;
     }
 
     @GetMapping("product/edit/{id}")
-    public ModelAndView showEditPage(@PathVariable int id){
+    public ModelAndView showEditPage(@PathVariable int id) {
         ModelAndView mav = new ModelAndView("admin/edit-product");
         Product product = productService.getProductById(id);
-        List<Category>categories = categoryService.getSubCategories();
+        List<Category> categories = categoryService.getSubCategories();
         mav.addObject("categories", categories);
         mav.addObject("product", product);
         return mav;
     }
 
     @PostMapping("product/edit/{id}")
-    public ModelAndView updateProduct(@ModelAttribute Product product){
+    public ModelAndView updateProduct(@ModelAttribute Product product) {
         return new ModelAndView("redirect:/admin/products");
     }
 
     @GetMapping("/product/delete/{id}")
-    public ModelAndView deleteProductById(@PathVariable int id){
+    public ModelAndView deleteProductById(@PathVariable int id) {
         productService.deleteProduct(id);
         return new ModelAndView("redirect:/admin/products");
     }

@@ -132,7 +132,7 @@
                                         <br>
                                         <div><input type="file" name="image1"/></div>
                                         <br>
-                                        <div><input type="file" name="image1"/></div>
+                                        <div><input type="file" name="image2"/></div>
                                         <br>
 
 

@@ -4,6 +4,9 @@ import com.embatask.productmanagement.domain.Category;
 import com.embatask.productmanagement.domain.Product;
 import com.embatask.productmanagement.repository.CategoryRepository;
 import com.embatask.productmanagement.repository.ProductRepository;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+    private final static Logger logger = LogManager.getLogger(Product.class);
     @Autowired
     private CategoryRepository categoryRepository;
 
