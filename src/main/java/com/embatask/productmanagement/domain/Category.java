@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="Category")
+@Table(name = "Category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +18,8 @@ public class Category {
     private int categoryID;
     @Column(name = "categoryName")
     private String categoryName;
-//    @Column(name = "parentCategoryID")
-//    private int parentCategoryID;
-@ToString.Exclude
+    //self-join between Category and parentCategory
+    @ToString.Exclude
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "parentCategoryID", referencedColumnName = "categoryID")
     private Category parentCategoryID;
@@ -33,7 +32,7 @@ public class Category {
     @JoinColumn(name = "parentCategoryID")
     private List<Category> categories;
     @ToString.Exclude
-    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> productList;
 
     @Override

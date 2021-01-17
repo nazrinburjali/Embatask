@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping
-public class AccessDenied {
+public class AccessDeniedController {
 
     @GetMapping("/accessdenied")
     public ModelAndView accessdenied() {
