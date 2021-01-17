@@ -9,6 +9,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.util.Optional;
+
 @Component
 public class UserValidator implements Validator {
 
@@ -59,8 +61,12 @@ public class UserValidator implements Validator {
         if (!errors.hasFieldErrors("userEmail")) {
             if (!GenericValidator.isEmail(user.getUserEmail())) {
                 errors.rejectValue("userEmail", "user.email.invalid");
+            }else if (userService.checkDuplicate(user.getUserEmail())){
+                errors.rejectValue("userEmail", "user.email.duplicate");
             }
                   }
+
+
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userPassword", "user.password.empty");
         if (!errors.hasFieldErrors("userPassword")) {

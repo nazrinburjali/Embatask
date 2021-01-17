@@ -1,13 +1,10 @@
 package com.embatask.productmanagement.service;
-import com.embatask.productmanagement.controller.AdminController;
 import com.embatask.productmanagement.domain.User;
 import com.embatask.productmanagement.repository.UserRepository;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.ArrayList;
@@ -51,10 +48,16 @@ public class UserService {
         User user = null;
         if(optionalUser.isPresent()){
             user = optionalUser.get();
+
         }
         return user;
     }
 
+    public boolean checkDuplicate(String email){
+        Optional<Boolean>optionalBoolean = Optional.of(userRepository.existsByUserEmail(email));
+        return true;
+
+    }
 
     public User updateUser(User user){
         Optional<User>optionalUser = userRepository.findById(user.getUserID());

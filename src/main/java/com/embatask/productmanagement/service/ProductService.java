@@ -1,17 +1,12 @@
 package com.embatask.productmanagement.service;
-
 import com.embatask.productmanagement.domain.Category;
 import com.embatask.productmanagement.domain.Product;
 import com.embatask.productmanagement.repository.CategoryRepository;
 import com.embatask.productmanagement.repository.ProductRepository;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
