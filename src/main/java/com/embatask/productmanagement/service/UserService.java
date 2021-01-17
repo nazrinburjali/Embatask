@@ -53,12 +53,6 @@ public class UserService {
         return user;
     }
 
-    public boolean checkDuplicate(String email){
-        Optional<Boolean>optionalBoolean = Optional.of(userRepository.existsByUserEmail(email));
-        return true;
-
-    }
-
     public User updateUser(User user){
         Optional<User>optionalUser = userRepository.findById(user.getUserID());
         User user1 = null;

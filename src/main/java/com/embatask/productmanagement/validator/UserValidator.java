@@ -61,7 +61,7 @@ public class UserValidator implements Validator {
         if (!errors.hasFieldErrors("userEmail")) {
             if (!GenericValidator.isEmail(user.getUserEmail())) {
                 errors.rejectValue("userEmail", "user.email.invalid");
-            }else if (userService.checkDuplicate(user.getUserEmail())){
+            }else if (userRepository.existsByUserEmail(user.getUserEmail())){
                 errors.rejectValue("userEmail", "user.email.duplicate");
             }
                   }

@@ -59,7 +59,7 @@ public class WebController {
         ModelAndView mav = new ModelAndView();
         if (result.hasErrors()) {
             result.getAllErrors();
-            mav.setViewName("web/register");
+            mav.setViewName("user/index");
         } else {
             userService.addUser(user);
             System.out.println("Ugurla qeydiyyatdan kecdiniz");
